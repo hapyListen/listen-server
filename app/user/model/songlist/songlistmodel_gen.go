@@ -7,6 +7,7 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
+	"time"
 
 	"github.com/zeromicro/go-zero/core/stores/builder"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
@@ -34,16 +35,14 @@ type (
 	}
 
 	Songlist struct {
-		Id             int64          `db:"id"`              // 歌曲ID,主键
-		Name           string         `db:"name"`            // 歌曲名称
-		PlaylistId     string         `db:"playlist_id"`     // 歌单ID
-		Address        string         `db:"address"`         // 歌曲地址
-		PictureAddress string         `db:"picture_address"` // 歌曲图片地址
-		Platform       sql.NullString `db:"platform"`        // 所属平台(bilibili、QQ、网易、酷我、酷狗...)
-		SingerId       sql.NullString `db:"singer_id"`       // 歌手ID(平台下的歌手ID)
-		Album          sql.NullString `db:"album"`           // 歌曲所属专辑（如果有）
-		AlbumId        sql.NullString `db:"album_id"`        // 歌曲所属专辑ID(如果有,记录平台下的专辑ID)
-		CollectionTime sql.NullTime   `db:"collection_time"` // 添加收藏时间
+		Id           int64     `db:"id"`             // 歌单ID,主键
+		OwnUserId    int64     `db:"own_user_id"`    // 歌单拥有者ID
+		Name         string    `db:"name"`           // 歌单名称
+		LastPlayTime time.Time `db:"last_play_time"` // 最后一次播放时间
+		PlayCount    int64     `db:"play_count"`     // 播放次数
+		IsPublic     int64     `db:"is_public"`      // 是否公开
+		Avatar       string    `db:"avatar"`         // 歌曲头像，默认用最后一次收藏的歌曲图片
+		Describe     string    `db:"describe"`       // 歌单描述
 	}
 )
 
@@ -75,14 +74,14 @@ func (m *defaultSonglistModel) FindOne(ctx context.Context, id int64) (*Songlist
 }
 
 func (m *defaultSonglistModel) Insert(ctx context.Context, data *Songlist) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, songlistRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Name, data.PlaylistId, data.Address, data.PictureAddress, data.Platform, data.SingerId, data.Album, data.AlbumId, data.CollectionTime)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?)", m.table, songlistRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.OwnUserId, data.Name, data.LastPlayTime, data.PlayCount, data.IsPublic, data.Avatar, data.Describe)
 	return ret, err
 }
 
 func (m *defaultSonglistModel) Update(ctx context.Context, data *Songlist) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, songlistRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Name, data.PlaylistId, data.Address, data.PictureAddress, data.Platform, data.SingerId, data.Album, data.AlbumId, data.CollectionTime, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.OwnUserId, data.Name, data.LastPlayTime, data.PlayCount, data.IsPublic, data.Avatar, data.Describe, data.Id)
 	return err
 }
 

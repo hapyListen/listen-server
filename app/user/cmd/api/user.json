@@ -1,0 +1,1071 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "user service",
+    "description": "user service",
+    "version": "v1"
+  },
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/user/login": {
+      "post": {
+        "summary": "用户登录",
+        "operationId": "UserLogin",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserLoginResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 登录",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserLoginReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/register": {
+      "post": {
+        "summary": "用户注册",
+        "operationId": "UserRegister",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserRegisterResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 注册",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegisterReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/reset-password": {
+      "post": {
+        "summary": "重置密码",
+        "operationId": "ResetPassword",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "description": " 重置密码",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ResetPasswordReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}": {
+      "get": {
+        "summary": "获取用户信息",
+        "operationId": "GetUserInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetUSerInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "userId",
+            "in": "query",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/song": {
+      "get": {
+        "summary": "获取歌曲",
+        "operationId": "GetSong",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSongResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "songId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "添加歌曲",
+        "operationId": "AddSong",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/AddSongResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/AddSongReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/song/delete": {
+      "post": {
+        "summary": "删除歌曲",
+        "operationId": "DeleteSong",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteSongResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteSongReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/song/update": {
+      "post": {
+        "summary": "更新歌曲",
+        "operationId": "UpdateSong",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateSongResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateSongReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/songlist": {
+      "get": {
+        "summary": "获取歌单",
+        "operationId": "GetSongList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GetSongListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "songlistId",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32"
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "创建歌单",
+        "operationId": "CreateSonglist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/CreateSonglistResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateSonglistReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/songlist/delete": {
+      "post": {
+        "summary": "删除歌单",
+        "operationId": "DeleteSonglist",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/DeleteSonglistResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/DeleteSonglistReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/songlist/update": {
+      "post": {
+        "summary": "更新歌单",
+        "operationId": "UpdateSongList",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateSongListResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateSongListReq"
+            }
+          }
+        ],
+        "tags": [
+          "songlist"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    },
+    "/v1/user/{userId}/update": {
+      "post": {
+        "summary": "更新用户信息",
+        "operationId": "UpdateUserInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UpdateUserInfoResp"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "description": " 更新用户信息",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserInfoReq"
+            }
+          }
+        ],
+        "tags": [
+          "user"
+        ],
+        "security": [
+          {
+            "apiKey": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "AddSongReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "songListId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pictureAddr": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "singerId": {
+          "type": "string"
+        },
+        "album": {
+          "type": "string"
+        },
+        "albumId": {
+          "type": "string"
+        }
+      },
+      "title": "AddSongReq",
+      "required": [
+        "name",
+        "address",
+        "songListId",
+        "pictureAddr",
+        "platform",
+        "singerId",
+        "album",
+        "albumId"
+      ]
+    },
+    "AddSongResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "AddSongResp"
+    },
+    "Base": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "Base",
+      "required": [
+        "code",
+        "msg"
+      ]
+    },
+    "CreateSonglistReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "describe": {
+          "type": "string"
+        }
+      },
+      "title": "CreateSonglistReq",
+      "required": [
+        "userId",
+        "name",
+        "isPublic",
+        "avatar",
+        "describe"
+      ]
+    },
+    "CreateSonglistResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "CreateSonglistResp"
+    },
+    "DeleteSongReq": {
+      "type": "object",
+      "properties": {
+        "songId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteSongReq",
+      "required": [
+        "songId"
+      ]
+    },
+    "DeleteSongResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteSongResp"
+    },
+    "DeleteSonglistReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "songListId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "DeleteSonglistReq",
+      "required": [
+        "userId",
+        "songListId"
+      ]
+    },
+    "DeleteSonglistResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "DeleteSonglistResp"
+    },
+    "GetSongListReq": {
+      "type": "object",
+      "properties": {
+        "songlistId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "GetSongListReq",
+      "required": [
+        "songlistId"
+      ]
+    },
+    "GetSongListResp": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "describe": {
+          "type": "string"
+        }
+      },
+      "title": "GetSongListResp",
+      "required": [
+        "userId",
+        "name",
+        "isPublic",
+        "avatar",
+        "describe"
+      ]
+    },
+    "GetSongReq": {
+      "type": "object",
+      "properties": {
+        "songId": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "GetSongReq",
+      "required": [
+        "songId"
+      ]
+    },
+    "GetSongResp": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "songListId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pictureAddr": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "singerId": {
+          "type": "string"
+        },
+        "album": {
+          "type": "string"
+        },
+        "albumId": {
+          "type": "string"
+        },
+        "collectTime": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "title": "GetSongResp",
+      "required": [
+        "name",
+        "address",
+        "songListId",
+        "pictureAddr",
+        "platform",
+        "singerId",
+        "album",
+        "albumId",
+        "collectTime"
+      ]
+    },
+    "GetUSerInfoReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        }
+      },
+      "title": "GetUSerInfoReq",
+      "required": [
+        "userId"
+      ]
+    },
+    "GetUSerInfoResp": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "statusFlag": {
+          "type": "string"
+        },
+        "personSignature": {
+          "type": "string"
+        }
+      },
+      "title": "GetUSerInfoResp",
+      "required": [
+        "name",
+        "phoneNumber",
+        "email",
+        "avatar",
+        "statusFlag",
+        "personSignature"
+      ]
+    },
+    "ResetPasswordReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "oldPassword": {
+          "type": "string"
+        },
+        "newPassword": {
+          "type": "string"
+        }
+      },
+      "title": "ResetPasswordReq",
+      "required": [
+        "userId",
+        "oldPassword",
+        "newPassword"
+      ]
+    },
+    "ResetPasswordResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "ResetPasswordResp"
+    },
+    "UpdateSongListReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "name": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "describe": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSongListReq",
+      "required": [
+        "userId",
+        "name",
+        "isPublic",
+        "avatar",
+        "describe"
+      ]
+    },
+    "UpdateSongListResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSongListResp"
+    },
+    "UpdateSongReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        },
+        "songListId": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "pictureAddr": {
+          "type": "string"
+        },
+        "platform": {
+          "type": "string"
+        },
+        "singerId": {
+          "type": "string"
+        },
+        "album": {
+          "type": "string"
+        },
+        "albumId": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSongReq",
+      "required": [
+        "name",
+        "address",
+        "songListId",
+        "pictureAddr",
+        "platform",
+        "singerId",
+        "album",
+        "albumId"
+      ]
+    },
+    "UpdateSongResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateSongResp"
+    },
+    "UpdateUserInfoReq": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "personSignature": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateUserInfoReq",
+      "required": [
+        "name",
+        "phoneNumber",
+        "email",
+        "avatar",
+        "personSignature"
+      ]
+    },
+    "UpdateUserInfoResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UpdateUserInfoResp"
+    },
+    "UserLoginReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "psaaword": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginReq",
+      "required": [
+        "userId",
+        "psaaword"
+      ]
+    },
+    "UserLoginResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UserLoginResp"
+    },
+    "UserRegisterReq": {
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "personSignature": {
+          "type": "string"
+        }
+      },
+      "title": "UserRegisterReq",
+      "required": [
+        "userId",
+        "password",
+        "name",
+        "phoneNumber",
+        "email",
+        "avatar",
+        "personSignature"
+      ]
+    },
+    "UserRegisterResp": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "msg": {
+          "type": "string"
+        }
+      },
+      "title": "UserRegisterResp"
+    }
+  },
+  "securityDefinitions": {
+    "apiKey": {
+      "type": "apiKey",
+      "description": "Enter JWT Bearer token **_only_**",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

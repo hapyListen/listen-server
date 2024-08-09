@@ -34,13 +34,15 @@ type (
 	}
 
 	User struct {
-		Id              int64          `db:"id"`               // 主键ID
-		Name            sql.NullString `db:"name"`             // 用户名
-		PhoneNumber     sql.NullString `db:"phone_number"`     // 电话号码
-		Email           sql.NullString `db:"email"`            // 邮箱
-		StatusFlag      sql.NullInt64  `db:"status_flag"`      // 1:听歌中~; 2:活跃者; 3:默默无闻的点歌达人
-		Avatar          sql.NullString `db:"avatar"`           // 用户头像，存储头像图片的链接
-		PersonSignature sql.NullString `db:"person_signature"` // 个人简介
+		Id              int64  `db:"id"`               // 主键ID
+		UserId          string `db:"user_id"`          // 用户Id
+		Password        string `db:"password"`         // 密码
+		Name            string `db:"name"`             // 用户名
+		PhoneNumber     string `db:"phone_number"`     // 电话号码
+		Email           string `db:"email"`            // 邮箱
+		StatusFlag      int64  `db:"status_flag"`      // 1:听歌中~; 2:活跃者; 3:默默无闻的点歌达人
+		Avatar          string `db:"avatar"`           // 用户头像，存储头像图片的链接
+		PersonSignature string `db:"person_signature"` // 个人简介
 	}
 )
 
@@ -72,14 +74,14 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error)
 }
 
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature)
 	return ret, err
 }
 
 func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature, data.Id)
 	return err
 }
 

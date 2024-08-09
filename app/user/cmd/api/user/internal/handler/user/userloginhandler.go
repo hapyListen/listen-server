@@ -3,12 +3,14 @@ package user
 import (
 	"net/http"
 
-	"github.com/zeromicro/go-zero/rest/httpx"
 	"listen-server/app/user/cmd/api/user/internal/logic/user"
 	"listen-server/app/user/cmd/api/user/internal/svc"
 	"listen-server/app/user/cmd/api/user/internal/types"
+
+	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
+// 用户登录
 func UserLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var req types.UserLoginReq

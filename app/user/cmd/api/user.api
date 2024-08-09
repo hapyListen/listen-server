@@ -10,60 +10,246 @@ info (
 
 import "base.api"
 
+// 用户
 type (
+	// 注册
+	UserRegisterReq {
+		UserId          string `json:"userId"`
+		Password        string `json:"password"`
+		Name            string `json:"name"`
+		PhoneNunber     string `json:"phoneNumber"`
+		Eamil           string `json:"email"`
+		Avatar          string `json:"avatar"`
+		PersonSignature string `json:"personSignature"`
+	}
+	UserRegisterResp {
+		Base
+	}
+	// 登录
 	UserLoginReq {
-		Name     string `json:"name"`
+		UserId   string `json:"userId"`
 		Password string `json:"psaaword"`
 	}
 	UserLoginResp {
+		Token string `json:"token"`
+		Base
+	}
+	// 重置密码
+	ResetPasswordReq {
+		UserId      string `json:"userId"`
+		oldPassword string `json:"oldPassword"`
+		NewPassword string `json:"newPassword"`
+	}
+	ResetPasswordResp {
+		Base
+	}
+	// 查询用户信息
+	GetUSerInfoReq {
+		UserId string `json:"userId"`
+	}
+	GetUSerInfoResp {
+		Name            string `json:"name"`
+		PhoneNunber     string `json:"phoneNumber"`
+		Eamil           string `json:"email"`
+		Avatar          string `json:"avatar"`
+		StatusFlag      string `json:"statusFlag"`
+		PersonSignature string `json:"personSignature"`
+	}
+	// 更新用户信息
+	UpdateUserInfoReq {
+		Name            string `json:"name"`
+		PhoneNunber     string `json:"phoneNumber"`
+		Eamil           string `json:"email"`
+		Avatar          string `json:"avatar"`
+		PersonSignature string `json:"personSignature"`
+	}
+	UpdateUserInfoResp {
 		Base
 	}
 )
 
+// 歌单
 type (
-	AddSonglistReq {
+	CreateSonglistReq {
+		UserId   int    `json:"userId"`
 		Name     string `json:"name"`
+		IsPublic string `json:"isPublic"`
+		Avatar   string `json:"avatar"`
 		Describe string `json:"describe"`
 	}
-	AddSonglistResp {
+	CreateSonglistResp {
+		Base
+	}
+	GetSongListReq {
+		SonglistId int `json:"songlistId"`
+	}
+	GetSongListResp {
+		UserId   int    `json:"userId"`
+		Name     string `json:"name"`
+		IsPublic string `json:"isPublic"`
+		Avatar   string `json:"avatar"`
+		Describe string `json:"describe"`
+	}
+	DeleteSonglistReq {
+		UserId     int `json:"userId"`
+		SongListId int `json:"songListId"`
+	}
+	DeleteSonglistResp {
+		Base
+	}
+	UpdateSongListReq {
+		UserId   int    `json:"userId"`
+		Name     string `json:"name"`
+		IsPublic string `json:"isPublic"`
+		Avatar   string `json:"avatar"`
+		Describe string `json:"describe"`
+	}
+	UpdateSongListResp {
+		Base
+	}
+)
+
+// 歌曲
+type (
+	AddSongReq {
+		Name            string `json:"name"`
+		Address         string `json:"address"`
+		SongListId      int    `json:"songListId"`
+		PicctureAddress string `json:"pictureAddr"`
+		PlatForm        string `json:"platform"`
+		SignerId        string `json:"singerId"`
+		Album           string `json:"album"`
+		AlbumId         string `json:"albumId"`
+	}
+	AddSongResp {
+		Base
+	}
+	GetSongReq {
+		SongId int `json:"songId"`
+	}
+	GetSongResp {
+		Name            string `json:"name"`
+		Address         string `json:"address"`
+		SongListId      int    `json:"songListId"`
+		PicctureAddress string `json:"pictureAddr"`
+		PlatForm        string `json:"platform"`
+		SignerId        string `json:"singerId"`
+		Album           string `json:"album"`
+		AlbumId         string `json:"albumId"`
+		CollectTime     int    `json:"collectTime"`
+	}
+	DeleteSongReq {
+		SongId int `json:"songId"`
+	}
+	DeleteSongResp {
+		Base
+	}
+	UpdateSongReq {
+		Name            string `json:"name"`
+		Address         string `json:"address"`
+		SongListId      int    `json:"songListId"`
+		PicctureAddress string `json:"pictureAddr"`
+		PlatForm        string `json:"platform"`
+		SignerId        string `json:"singerId"`
+		Album           string `json:"album"`
+		AlbumId         string `json:"albumId"`
+	}
+	UpdateSongResp {
 		Base
 	}
 )
 
 @server (
+	jwt:    Auth
 	prefix: /v1
 	group:  user
 )
 service user-api {
-	// user
+	@doc (
+		summary: "用户注册"
+	)
+	@handler UserRegister
+	post /user/register (UserRegisterReq) returns (UserRegisterResp)
+
+	@doc (
+		summary: "用户登录"
+	)
 	@handler UserLogin
 	post /user/login (UserLoginReq) returns (UserLoginResp)
-//    @handler UserLogout
-//     post /user/logout (UserLogoutReq) returns (UserLogoutResp)
-//     @handler ResetPassword
-//     post  /user/password (ResetPasswordReq) returns (ResetPasswordResp)
-//     @handler UpdateUserInfo
-//     post /user/info (UpdateUserInfoReq) returns (UpdateUserInfoResp)
+
+	@doc (
+		summary: "重置密码"
+	)
+	@handler ResetPassword
+	post /user/reset-password (ResetPasswordReq) returns (ResetPasswordResp)
+
+	@doc (
+		summary: "获取用户信息"
+	)
+	@handler GetUserInfo
+	get /user/:userId (GetUSerInfoReq) returns (GetUSerInfoResp)
+
+	@doc (
+		summary: "更新用户信息"
+	)
+	@handler UpdateUserInfo
+	post /user/:userId/update (UpdateUserInfoReq) returns (UpdateUserInfoResp)
 }
 
 @server (
+	jwt:    Auth
 	prefix: /v1
 	group:  songlist
 )
 service user-api {
 	// songlist
-	@handler AddSonglist
-	post /songlist/:user-id/add (AddSonglistReq) returns (AddSonglistResp)
-// @handler DeleteSonglist
-// post /songlist/:user-id/delete (DeleteSonglistReq) returns (DeleteSonglistResp)
-// @handler UpdateList
-// post /songlist/:user-id/update (UpdateListReq) returns (UpdateListResp)
-// // playlist
-// @handler AddSong
-// post /songlist/:user-id/add-song (AddSongReq) returns (AddSongResp)
-// @handler UpdateSong
-// post /songlist/:user-id/update-song (AddSongReq) returns (AddSongResp)
-// @handler RemoveSong
-// post /songlist/:user-id/remove-song (RemoveSongReq) returns (RemoveSongResp)
+	@doc (
+		summary: "创建歌单"
+	)
+	@handler CreateSonglist
+	post /user/:userId/songlist (CreateSonglistReq) returns (CreateSonglistResp)
+
+	@doc (
+		summary: "获取歌单"
+	)
+	@handler GetSongList
+	get /user/:userId/songlist (GetSongListReq) returns (GetSongListResp)
+
+	@doc (
+		summary: "删除歌单"
+	)
+	@handler DeleteSonglist
+	post /user/:userId/songlist/delete (DeleteSonglistReq) returns (DeleteSonglistResp)
+
+	@doc (
+		summary: "更新歌单"
+	)
+	@handler UpdateSongList
+	post /user/:userId/songlist/update (UpdateSongListReq) returns (UpdateSongListResp)
+
+	// song
+	@doc (
+		summary: "添加歌曲"
+	)
+	@handler AddSong
+	post /user/:userId/song (AddSongReq) returns (AddSongResp)
+
+	@doc (
+		summary: "获取歌曲"
+	)
+	@handler GetSong
+	get /user/:userId/song (GetSongReq) returns (GetSongResp)
+
+	@doc (
+		summary: "删除歌曲"
+	)
+	@handler DeleteSong
+	post /user/:userId/song/delete (DeleteSongReq) returns (DeleteSongResp)
+
+	@doc (
+		summary: "更新歌曲"
+	)
+	@handler UpdateSong
+	post /user/:userId/song/update (UpdateSongReq) returns (UpdateSongResp)
 }
 

@@ -9,21 +9,22 @@ import (
 	"github.com/zeromicro/go-zero/core/logx"
 )
 
-type AddSonglistLogic struct {
+type GetSongListLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
 }
 
-func NewAddSonglistLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AddSonglistLogic {
-	return &AddSonglistLogic{
+// 获取歌单
+func NewGetSongListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GetSongListLogic {
+	return &GetSongListLogic{
 		Logger: logx.WithContext(ctx),
 		ctx:    ctx,
 		svcCtx: svcCtx,
 	}
 }
 
-func (l *AddSonglistLogic) AddSonglist(req *types.AddSonglistReq) (resp *types.AddSonglistResp, err error) {
+func (l *GetSongListLogic) GetSongList(req *types.GetSongListReq) (resp *types.GetSongListResp, err error) {
 	// todo: add your logic here and delete this line
 
 	return

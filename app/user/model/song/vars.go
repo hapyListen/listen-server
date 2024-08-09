@@ -1,4 +1,4 @@
-package playlist
+package song
 
 import "github.com/zeromicro/go-zero/core/stores/sqlx"
 
