@@ -1,0 +1,69 @@
+syntax = "v1"
+
+info (
+	title:   "user service"
+	desc:    "user service"
+	author:  "cyao"
+	date:    "2024.08.08"
+	version: "v1"
+)
+
+import "base.api"
+
+type (
+	UserLoginReq {
+		Name     string `json:"name"`
+		Password string `json:"psaaword"`
+	}
+	UserLoginResp {
+		Base
+	}
+)
+
+type (
+	AddSonglistReq {
+		Name     string `json:"name"`
+		Describe string `json:"describe"`
+	}
+	AddSonglistResp {
+		Base
+	}
+)
+
+@server (
+	prefix: /v1
+	group:  user
+)
+service user-api {
+	// user
+	@handler UserLogin
+	post /user/login (UserLoginReq) returns (UserLoginResp)
+//    @handler UserLogout
+//     post /user/logout (UserLogoutReq) returns (UserLogoutResp)
+//     @handler ResetPassword
+//     post  /user/password (ResetPasswordReq) returns (ResetPasswordResp)
+//     @handler UpdateUserInfo
+//     post /user/info (UpdateUserInfoReq) returns (UpdateUserInfoResp)
+}
+
+@server (
+	prefix: /v1
+	group:  songlist
+)
+service user-api {
+	// songlist
+	@handler AddSonglist
+	post /songlist/:user-id/add (AddSonglistReq) returns (AddSonglistResp)
+// @handler DeleteSonglist
+// post /songlist/:user-id/delete (DeleteSonglistReq) returns (DeleteSonglistResp)
+// @handler UpdateList
+// post /songlist/:user-id/update (UpdateListReq) returns (UpdateListResp)
+// // playlist
+// @handler AddSong
+// post /songlist/:user-id/add-song (AddSongReq) returns (AddSongResp)
+// @handler UpdateSong
+// post /songlist/:user-id/update-song (AddSongReq) returns (AddSongResp)
+// @handler RemoveSong
+// post /songlist/:user-id/remove-song (RemoveSongReq) returns (RemoveSongResp)
+}
+
