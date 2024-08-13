@@ -14,10 +14,10 @@ import "base.api"
 type (
 	// 注册
 	UserRegisterReq {
-		UserId          string `json:"userId"`
+		UserId          int    `json:"userId"`
 		Password        string `json:"password"`
 		Name            string `json:"name"`
-		PhoneNunber     string `json:"phoneNumber"`
+		PhoneNumber     string `json:"phoneNumber"`
 		Eamil           string `json:"email"`
 		Avatar          string `json:"avatar"`
 		PersonSignature string `json:"personSignature"`
@@ -27,8 +27,8 @@ type (
 	}
 	// 登录
 	UserLoginReq {
-		UserId   string `json:"userId"`
-		Password string `json:"psaaword"`
+		UserId   int    `form:"userId"`
+		Password string `form:"psaaword"`
 	}
 	UserLoginResp {
 		Token string `json:"token"`
@@ -36,7 +36,7 @@ type (
 	}
 	// 重置密码
 	ResetPasswordReq {
-		UserId      string `json:"userId"`
+		UserId      int    `json:"userId"`
 		oldPassword string `json:"oldPassword"`
 		NewPassword string `json:"newPassword"`
 	}
@@ -45,7 +45,7 @@ type (
 	}
 	// 查询用户信息
 	GetUSerInfoReq {
-		UserId string `json:"userId"`
+		UserId int `path:"userId"`
 	}
 	GetUSerInfoResp {
 		Name            string `json:"name"`
@@ -166,18 +166,6 @@ type (
 )
 service user-api {
 	@doc (
-		summary: "用户注册"
-	)
-	@handler UserRegister
-	post /user/register (UserRegisterReq) returns (UserRegisterResp)
-
-	@doc (
-		summary: "用户登录"
-	)
-	@handler UserLogin
-	post /user/login (UserLoginReq) returns (UserLoginResp)
-
-	@doc (
 		summary: "重置密码"
 	)
 	@handler ResetPassword
@@ -251,5 +239,23 @@ service user-api {
 	)
 	@handler UpdateSong
 	post /user/:userId/song/update (UpdateSongReq) returns (UpdateSongResp)
+}
+
+@server (
+	prefix: /v1
+	group:  usermanager
+)
+service user-api {
+	@doc (
+		summary: "用户注册"
+	)
+	@handler UserRegister
+	post /user/register (UserRegisterReq) returns (UserRegisterResp)
+
+	@doc (
+		summary: "用户登录"
+	)
+	@handler UserLogin
+	post /user/login (UserLoginReq) returns (UserLoginResp)
 }
 

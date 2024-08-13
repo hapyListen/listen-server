@@ -1,26 +1,26 @@
-package user
+package usermanager
 
 import (
 	"net/http"
 
-	"listen-server/app/user/cmd/api/user/internal/logic/user"
+	"listen-server/app/user/cmd/api/user/internal/logic/usermanager"
 	"listen-server/app/user/cmd/api/user/internal/svc"
 	"listen-server/app/user/cmd/api/user/internal/types"
 
 	"github.com/zeromicro/go-zero/rest/httpx"
 )
 
-// 用户登录
-func UserLoginHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
+// 用户注册
+func UserRegisterHandler(svcCtx *svc.ServiceContext) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		var req types.UserLoginReq
+		var req types.UserRegisterReq
 		if err := httpx.Parse(r, &req); err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 			return
 		}
 
-		l := user.NewUserLoginLogic(r.Context(), svcCtx)
-		resp, err := l.UserLogin(&req)
+		l := usermanager.NewUserRegisterLogic(r.Context(), svcCtx)
+		resp, err := l.UserRegister(&req)
 		if err != nil {
 			httpx.ErrorCtx(r.Context(), w, err)
 		} else {

@@ -79,7 +79,7 @@ type GetSongResp struct {
 }
 
 type GetUSerInfoReq struct {
-	UserId string `json:"userId"`
+	UserId int `path:"userId"`
 }
 
 type GetUSerInfoResp struct {
@@ -92,7 +92,7 @@ type GetUSerInfoResp struct {
 }
 
 type ResetPasswordReq struct {
-	UserId      string `json:"userId"`
+	UserId      int    `json:"userId"`
 	OldPassword string `json:"oldPassword"`
 	NewPassword string `json:"newPassword"`
 }
@@ -141,19 +141,20 @@ type UpdateUserInfoResp struct {
 }
 
 type UserLoginReq struct {
-	UserId   string `json:"userId"`
-	Password string `json:"psaaword"`
+	UserId   int    `form:"userId"`
+	Password string `form:"psaaword"`
 }
 
 type UserLoginResp struct {
+	Token string `json:"token"`
 	Base
 }
 
 type UserRegisterReq struct {
-	UserId          string `json:"userId"`
+	UserId          int    `json:"userId"`
 	Password        string `json:"password"`
 	Name            string `json:"name"`
-	PhoneNunber     string `json:"phoneNumber"`
+	PhoneNumber     string `json:"phoneNumber"`
 	Eamil           string `json:"email"`
 	Avatar          string `json:"avatar"`
 	PersonSignature string `json:"personSignature"`

@@ -5,6 +5,8 @@ go 1.20
 require (
 	github.com/golang-jwt/jwt/v5 v5.2.1
 	github.com/zeromicro/go-zero v1.7.0
+	github.com/zeromicro/x v0.0.0-20240408115609-8224c482b07e
+	go.opentelemetry.io/otel/sdk v1.24.0
 )
 
 require (
@@ -36,7 +38,6 @@ require (
 	go.opentelemetry.io/otel/exporters/stdout/stdouttrace v1.24.0 // indirect
 	go.opentelemetry.io/otel/exporters/zipkin v1.24.0 // indirect
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
-	go.opentelemetry.io/otel/sdk v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	go.opentelemetry.io/proto/otlp v1.3.1 // indirect
 	go.uber.org/automaxprocs v1.5.3 // indirect

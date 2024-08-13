@@ -6,6 +6,7 @@ import (
 
 	songlist "listen-server/app/user/cmd/api/user/internal/handler/songlist"
 	user "listen-server/app/user/cmd/api/user/internal/handler/user"
+	usermanager "listen-server/app/user/cmd/api/user/internal/handler/usermanager"
 	"listen-server/app/user/cmd/api/user/internal/svc"
 
 	"github.com/zeromicro/go-zero/rest"
@@ -82,18 +83,6 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Handler: user.UpdateUserInfoHandler(serverCtx),
 			},
 			{
-				// 用户登录
-				Method:  http.MethodPost,
-				Path:    "/user/login",
-				Handler: user.UserLoginHandler(serverCtx),
-			},
-			{
-				// 用户注册
-				Method:  http.MethodPost,
-				Path:    "/user/register",
-				Handler: user.UserRegisterHandler(serverCtx),
-			},
-			{
 				// 重置密码
 				Method:  http.MethodPost,
 				Path:    "/user/reset-password",
@@ -101,6 +90,24 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 			},
 		},
 		rest.WithJwt(serverCtx.Config.Auth.AccessSecret),
+		rest.WithPrefix("/v1"),
+	)
+
+	server.AddRoutes(
+		[]rest.Route{
+			{
+				// 用户登录
+				Method:  http.MethodPost,
+				Path:    "/user/login",
+				Handler: usermanager.UserLoginHandler(serverCtx),
+			},
+			{
+				// 用户注册
+				Method:  http.MethodPost,
+				Path:    "/user/register",
+				Handler: usermanager.UserRegisterHandler(serverCtx),
+			},
+		},
 		rest.WithPrefix("/v1"),
 	)
 }

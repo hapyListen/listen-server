@@ -24,6 +24,7 @@ type (
 	userModel interface {
 		Insert(ctx context.Context, data *User) (sql.Result, error)
 		FindOne(ctx context.Context, id int64) (*User, error)
+		FindOneByUserId(ctx context.Context, userId int64) (*User, error)
 		Update(ctx context.Context, data *User) error
 		Delete(ctx context.Context, id int64) error
 	}
@@ -35,7 +36,7 @@ type (
 
 	User struct {
 		Id              int64  `db:"id"`               // 主键ID
-		UserId          string `db:"user_id"`          // 用户Id
+		UserId          int64  `db:"user_id"`          // 用户ID
 		Password        string `db:"password"`         // 密码
 		Name            string `db:"name"`             // 用户名
 		PhoneNumber     string `db:"phone_number"`     // 电话号码
@@ -73,15 +74,29 @@ func (m *defaultUserModel) FindOne(ctx context.Context, id int64) (*User, error)
 	}
 }
 
+func (m *defaultUserModel) FindOneByUserId(ctx context.Context, userId int64) (*User, error) {
+	var resp User
+	query := fmt.Sprintf("select %s from %s where `user_id` = ? limit 1", userRows, m.table)
+	err := m.conn.QueryRowCtx(ctx, &resp, query, userId)
+	switch err {
+	case nil:
+		return &resp, nil
+	case sqlx.ErrNotFound:
+		return nil, ErrNotFound
+	default:
+		return nil, err
+	}
+}
+
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
 	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
 	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature)
 	return ret, err
 }
 
-func (m *defaultUserModel) Update(ctx context.Context, data *User) error {
+func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature, data.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.UserId, newData.Password, newData.Name, newData.PhoneNumber, newData.Email, newData.StatusFlag, newData.Avatar, newData.PersonSignature, newData.Id)
 	return err
 }
 
