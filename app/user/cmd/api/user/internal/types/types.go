@@ -142,7 +142,7 @@ type UpdateUserInfoResp struct {
 
 type UserLoginReq struct {
 	UserId   int    `form:"userId"`
-	Password string `form:"psaaword"`
+	Password string `form:"password"`
 }
 
 type UserLoginResp struct {

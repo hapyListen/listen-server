@@ -7,8 +7,8 @@ import (
 
 	"listen-server/app/user/cmd/api/user/internal/svc"
 	"listen-server/app/user/cmd/api/user/internal/types"
-	"listen-server/app/user/common/encrypt"
 	"listen-server/app/user/model/user"
+	"listen-server/common/aes"
 
 	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/x/errors"
@@ -34,7 +34,7 @@ func (l *UserRegisterLogic) UserRegister(req *types.UserRegisterReq) (resp *type
 		return nil, errors.New(http.StatusBadRequest, "userId == 0 or name == '' or password == '' ")
 	}
 
-	passwd, err := encrypt.EncryptAES([]byte(req.Password))
+	passwd, err := aes.EncryptAES([]byte(req.Password))
 	if err != nil {
 		return nil, errors.New(http.StatusBadRequest, "password format error")
 	}

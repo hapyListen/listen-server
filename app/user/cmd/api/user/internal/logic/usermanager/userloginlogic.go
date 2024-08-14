@@ -8,7 +8,7 @@ import (
 
 	"listen-server/app/user/cmd/api/user/internal/svc"
 	"listen-server/app/user/cmd/api/user/internal/types"
-	"listen-server/app/user/common/encrypt"
+	"listen-server/common/aes"
 	"listen-server/common/jwt"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -65,7 +65,7 @@ func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLog
 	if err != nil {
 		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("database operation failed, userId %v is not register %v", req.UserId))
 	}
-	passwd, err := encrypt.DecryptAES(userInfo.Password)
+	passwd, err := aes.DecryptAES(userInfo.Password)
 	if err != nil {
 		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("database password format error, %v", err))
 	}

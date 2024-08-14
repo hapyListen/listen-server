@@ -22,7 +22,8 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
-	server := rest.MustNewServer(c.RestConf)
+	// Init service and set jwt authentication handle
+	server := rest.MustNewServer(c.RestConf, rest.WithUnauthorizedCallback(handle.JwtUnauthorizedResult))
 	defer server.Stop()
 
 	ctx := svc.NewServiceContext(c)

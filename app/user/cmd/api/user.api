@@ -28,7 +28,7 @@ type (
 	// 登录
 	UserLoginReq {
 		UserId   int    `form:"userId"`
-		Password string `form:"psaaword"`
+		Password string `form:"password"`
 	}
 	UserLoginResp {
 		Token string `json:"token"`
