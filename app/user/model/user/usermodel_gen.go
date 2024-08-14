@@ -44,6 +44,7 @@ type (
 		StatusFlag      int64  `db:"status_flag"`      // 1:听歌中~; 2:活跃者; 3:默默无闻的点歌达人
 		Avatar          string `db:"avatar"`           // 用户头像，存储头像图片的链接
 		PersonSignature string `db:"person_signature"` // 个人简介
+		Token           string `db:"token"`            // 用户Token
 	}
 )
 
@@ -89,14 +90,14 @@ func (m *defaultUserModel) FindOneByUserId(ctx context.Context, userId int64) (*
 }
 
 func (m *defaultUserModel) Insert(ctx context.Context, data *User) (sql.Result, error) {
-	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
-	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature)
+	query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, userRowsExpectAutoSet)
+	ret, err := m.conn.ExecCtx(ctx, query, data.UserId, data.Password, data.Name, data.PhoneNumber, data.Email, data.StatusFlag, data.Avatar, data.PersonSignature, data.Token)
 	return ret, err
 }
 
 func (m *defaultUserModel) Update(ctx context.Context, newData *User) error {
 	query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, userRowsWithPlaceHolder)
-	_, err := m.conn.ExecCtx(ctx, query, newData.UserId, newData.Password, newData.Name, newData.PhoneNumber, newData.Email, newData.StatusFlag, newData.Avatar, newData.PersonSignature, newData.Id)
+	_, err := m.conn.ExecCtx(ctx, query, newData.UserId, newData.Password, newData.Name, newData.PhoneNumber, newData.Email, newData.StatusFlag, newData.Avatar, newData.PersonSignature, newData.Token, newData.Id)
 	return err
 }
 

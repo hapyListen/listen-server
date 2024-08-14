@@ -1,51 +1,51 @@
 package jwt
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
+type UserJwt struct {
+	jwt.RegisteredClaims
+	UserId int `json:"userId"`
+}
+
 const (
-	defaultExpired = 1 // The unit is hours
+	DefaultExpired = time.Hour * 1 // Default expiration time is 1 hour
 )
 
 func GenerateJWT(secretKey string, expiredTime int64, userId int) (string, error) {
-	if expiredTime == 0 {
-		expiredTime = defaultExpired
-	}
-	token := jwt.New(jwt.SigningMethodHS256)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["exp"] = time.Now().Add(time.Hour * time.Duration(expiredTime)).Unix()
-	claims["userId"] = userId
-
-	tokenString, err := token.SignedString([]byte(secretKey))
-	if err != nil {
-		return "", err
+	exp := DefaultExpired
+	if expiredTime != 0 {
+		exp = time.Hour * time.Duration(expiredTime)
 	}
 
-	return tokenString, nil
+	claims := UserJwt{
+		UserId: userId,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(exp)), // Expiration time
+			IssuedAt:  jwt.NewNumericDate(time.Now()),          // Issue time
+			NotBefore: jwt.NewNumericDate(time.Now()),          // Effective time
+		},
+	}
+
+	// Use HS256 signature algorithm
+	t := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	return t.SignedString([]byte(secretKey))
 }
 
-func parseJWT(secretKey, tokenString string) (userId int, err error) {
-	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("unsupported signature method: %v", token.Header["alg"])
-		}
+func ParseJWT(secretKey, token string) (*UserJwt, error) {
+	t, err := jwt.ParseWithClaims(token, &UserJwt{}, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secretKey), nil
 	})
-
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userId, ok := claims["userId"].(int)
-		if !ok {
-			return 0, fmt.Errorf("incorrect userId value: %v", claims["userId"])
-		}
-		return userId, nil
+	if claims, ok := t.Claims.(*UserJwt); ok && t.Valid {
+		return claims, nil
+	} else {
+		return nil, err
 	}
-	return 0, fmt.Errorf("Invalid token")
 }

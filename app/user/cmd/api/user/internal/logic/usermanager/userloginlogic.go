@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net/http"
+	"time"
 
 	"listen-server/app/user/cmd/api/user/internal/svc"
 	"listen-server/app/user/cmd/api/user/internal/types"
@@ -29,6 +30,32 @@ func NewUserLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UserLog
 	}
 }
 
+// Generate JWT
+func (l *UserLoginLogic) generateJWT(oldToken string, userId int) (token string, err error) {
+	if oldToken != "" {
+		userJwt, err := jwt.ParseJWT(l.svcCtx.Config.Auth.AccessSecret, oldToken)
+		if err != nil {
+			return "", fmt.Errorf("ParseJWT failed, %v", err)
+		}
+
+		exp, err := userJwt.GetExpirationTime()
+		if err != nil {
+			return "", fmt.Errorf("GetExpirationTime failed, %v", err)
+		}
+		if time.Now().Sub(exp.Time) < 0 {
+			return oldToken, nil
+		}
+	}
+
+	authCfg := l.svcCtx.Config.Auth
+	token, err = jwt.GenerateJWT(authCfg.AccessSecret, authCfg.AccessExpire, userId)
+	if err != nil {
+		return "", errors.New(http.StatusBadRequest, fmt.Sprintf("GenerateJWT failed, %v", err))
+	}
+
+	return token, nil
+}
+
 func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLoginResp, err error) {
 	if req.UserId == 0 || req.Password == "" {
 		return nil, errors.New(http.StatusBadRequest, "userId == 0 or password == '' ")
@@ -46,11 +73,14 @@ func (l *UserLoginLogic) UserLogin(req *types.UserLoginReq) (resp *types.UserLog
 		return nil, errors.New(http.StatusBadRequest, "incorrect password")
 	}
 
-	// Generate JWT
-	authCfg := l.svcCtx.Config.Auth
-	token, err := jwt.GenerateJWT(authCfg.AccessSecret, authCfg.AccessExpire, req.UserId)
+	token, err := l.generateJWT(userInfo.Token, int(userInfo.UserId))
 	if err != nil {
-		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("GenerateJWT failed, %v", err))
+		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("generateJWT failed, %v", err))
+	}
+	userInfo.Token = token
+
+	if err = l.svcCtx.UserModel.Update(context.Background(), userInfo); err != nil {
+		return nil, errors.New(http.StatusBadRequest, fmt.Sprintf("Update user info failed, %v", err))
 	}
 
 	return &types.UserLoginResp{
